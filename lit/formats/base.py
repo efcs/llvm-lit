@@ -22,8 +22,12 @@ class FileBasedTest(TestFormat):
 
             filepath = os.path.join(source_path, filename)
             if not os.path.isdir(filepath):
-                base,ext = os.path.splitext(filename)
-                if ext in localConfig.suffixes:
+                should_take = False
+                for ext in localConfig.suffixes:
+                    if filename.endswith(ext):
+                        should_take = True
+                        break
+                if should_take:
                     yield lit.Test.Test(testSuite, path_in_suite + (filename,),
                                         localConfig)
 
