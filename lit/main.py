@@ -44,7 +44,7 @@ class TestingProgressDisplay(object):
 
         ShouldShow = test.result.code.isFailure or \
             (self.opts.show_unsupported and test.result.code.name == 'UNSUPPORTED') or \
-            (test.result.code.name == 'WARN')
+            (test.result.code.name == 'WARN') or \
             (not self.opts.quiet and not self.opts.succinct)
         if not ShouldShow:
             return
