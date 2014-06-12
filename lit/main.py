@@ -58,7 +58,8 @@ class TestingProgressDisplay(object):
                                      self.completed, self.numTests))
 
         # Show the test failure output, if requested.
-        if test.result.code.isFailure and self.opts.showOutput:
+        if (test.result.code.isFailure or test.result.code.name == 'WARN') \
+            and self.opts.showOutput:
             print("%s TEST '%s' FAILED %s" % ('*'*20, test.getFullName(),
                                               '*'*20))
             print(test.result.output)
