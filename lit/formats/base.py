@@ -14,6 +14,12 @@ class FileBasedTest(TestFormat):
     def getTestsInDirectory(self, testSuite, path_in_suite,
                             litConfig, localConfig):
         source_path = testSuite.getSourcePath(path_in_suite)
+        try:
+            dir_entries = os.listdir(source_path)
+        except OSError as e:
+            print("OSError: " + str(e))
+            return 
+        
         for filename in os.listdir(source_path):
             # Ignore dot files and excluded tests.
             if (filename.startswith('.') or
