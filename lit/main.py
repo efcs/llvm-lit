@@ -410,10 +410,13 @@ def main(builtinParameters = {}):
                       ('Unsupported Tests  ', lit.Test.UNSUPPORTED),
                       ('Unresolved Tests   ', lit.Test.UNRESOLVED),
                       ('Unexpected Passes  ', lit.Test.XPASS),
-                      ('Unexpected Failures', lit.Test.FAIL),):
+                      ('Unexpected Failures', lit.Test.FAIL),
+                      ('Unexpected Warnings', lit.Test.WARN),):
         if opts.quiet and not code.isFailure:
             continue
         N = len(byCode.get(code,[]))
+        if code == lit.Test.PASS:
+            N += len(byCode.get(lit.Test.WARN,[]))
         if N:
             print('  %s: %d' % (name,N))
 
