@@ -21,9 +21,20 @@ class FileBasedTest(TestFormat):
             return 
         
         for filename in os.listdir(source_path):
-            # Ignore dot files and excluded tests.
-            if (filename.startswith('.') or
-                filename in localConfig.excludes):
+           # Ignore dot files and excluded tests.
+            if (filename.startswith('.')):
+                continue
+            
+            # Removes any test that shared a prefix with an excluded test.
+            should_take = True
+            rpath = os.path.realpath(os.path.join(filename, source_path))
+            for ex in localConfig.excludes:
+                pre = os.path.commonprefix([os.path.realpath(ex), rpath])
+                if pre == ex:
+                    should_take = False
+                    break
+                
+            if not should_take:
                 continue
 
             filepath = os.path.join(source_path, filename)
