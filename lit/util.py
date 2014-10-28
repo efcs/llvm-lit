@@ -156,18 +156,13 @@ def executeCommand(command, cwd=None, env=None):
     if exitCode == -signal.SIGINT:
         raise KeyboardInterrupt
 
-    def to_string(bytes):
-        if isinstance(bytes, str):
-            return bytes
-        return bytes.encode('utf-8')
-
     # Ensure the resulting output is always of string type.
     try:
-        out = to_string(out.decode('utf-8'))
+        out = str(out.decode('ascii'))
     except:
         out = str(out)
     try:
-        err = to_string(err.decode('utf-8'))
+        err = str(err.decode('ascii'))
     except:
         err = str(err)
 

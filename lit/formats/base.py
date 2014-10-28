@@ -14,16 +14,37 @@ class FileBasedTest(TestFormat):
     def getTestsInDirectory(self, testSuite, path_in_suite,
                             litConfig, localConfig):
         source_path = testSuite.getSourcePath(path_in_suite)
+        try:
+            dir_entries = os.listdir(source_path)
+        except OSError as e:
+            print("OSError: " + str(e))
+            return 
+        
         for filename in os.listdir(source_path):
-            # Ignore dot files and excluded tests.
-            if (filename.startswith('.') or
-                filename in localConfig.excludes):
+           # Ignore dot files and excluded tests.
+            if (filename.startswith('.')):
+                continue
+            
+            # Removes any test that shared a prefix with an excluded test.
+            should_take = True
+            rpath = os.path.realpath(os.path.join(filename, source_path))
+            for ex in localConfig.excludes:
+                pre = os.path.commonprefix([os.path.realpath(ex), rpath])
+                if pre == ex:
+                    should_take = False
+                    break
+                
+            if not should_take:
                 continue
 
             filepath = os.path.join(source_path, filename)
             if not os.path.isdir(filepath):
-                base,ext = os.path.splitext(filename)
-                if ext in localConfig.suffixes:
+                should_take = False
+                for ext in localConfig.suffixes:
+                    if filename.endswith(ext):
+                        should_take = True
+                        break
+                if should_take:
                     yield lit.Test.Test(testSuite, path_in_suite + (filename,),
                                         localConfig)
 
