@@ -30,7 +30,6 @@ FAIL        = ResultCode('FAIL', True)
 XPASS       = ResultCode('XPASS', True)
 UNRESOLVED  = ResultCode('UNRESOLVED', True)
 UNSUPPORTED = ResultCode('UNSUPPORTED', False)
-WARN        = ResultCode('WARN', False)
 
 # Test metric values.
 
